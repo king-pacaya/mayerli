@@ -12,156 +12,27 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    * {
-      font-family: 'Montserrat', sans-serif;
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background: #fff5f7;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    #root {
-      width: 100%;
-      height: 100%;
-      max-width: 450px;
-      background: white;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
-    .story-container {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      background: #fff;
-    }
-    .story-slide {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
-      text-align: center;
-      animation: fadeIn 0.4s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .story-image {
-      width: 100%;
-      max-height: 55vh;
-      object-fit: cover;
-      border-radius: 20px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    .story-message {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #374151;
-      background: #fff1f2;
-      padding: 25px;
-      border-radius: 24px;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-      border: 1px solid #ffe4e6;
-    }
-    .nav-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 45px;
-      height: 45px;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(5px);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #f43f5e;
-      z-index: 50;
-      border: 1px solid rgba(244, 63, 94, 0.1);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .nav-button:active { transform: translateY(-50%) scale(0.9); }
-    .nav-button.left { left: 12px; }
-    .nav-button.right { right: 12px; }
-    
-    .header {
-      padding: 20px 24px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .header-left {
-      font-weight: 700;
-      color: #f43f5e;
-      font-size: 0.95rem;
-    }
-    .countdown-timer {
-      background: #fdf2f8;
-      color: #f43f5e;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border: 1px solid #fbcfe8;
-    }
-    .progress-dots {
-      display: flex;
-      gap: 4px;
-      padding: 0 24px;
-      margin-top: 5px;
-    }
-    .dot {
-      height: 4px;
-      flex: 1;
-      background: #ffe4e6;
-      border-radius: 2px;
-    }
+    * { font-family: 'Montserrat', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fff5f7; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    #root { width: 100%; height: 100%; max-width: 450px; background: white; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); position: relative; }
+    .story-container { height: 100%; display: flex; flex-direction: column; position: relative; background: #fff; }
+    .story-slide { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center; animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+    .story-image { width: 100%; max-height: 55vh; object-fit: cover; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); margin-bottom: 20px; cursor: zoom-in; }
+    .story-message { font-size: 1.1rem; line-height: 1.6; color: #374151; background: #fff1f2; padding: 25px; border-radius: 24px; border: 1px solid #ffe4e6; }
+    .nav-button { position: absolute; top: 50%; transform: translateY(-50%); width: 45px; height: 45px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #f43f5e; z-index: 50; border: 1px solid rgba(244, 63, 94, 0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .nav-button.left { left: 12px; } .nav-button.right { right: 12px; }
+    .header { padding: 20px 24px 10px; display: flex; justify-content: space-between; align-items: center; }
+    .header-left { font-weight: 700; color: #f43f5e; font-size: 0.95rem; }
+    .countdown-timer { background: #fdf2f8; color: #f43f5e; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; border: 1px solid #fbcfe8; }
+    .progress-dots { display: flex; gap: 4px; padding: 0 24px; margin-top: 5px; }
+    .dot { height: 4px; flex: 1; background: #ffe4e6; border-radius: 2px; }
     .dot.active { background: #f43f5e; }
-
-    .lock-screen {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 40px;
-      background: linear-gradient(135deg, #fff 0%, #fff1f2 100%);
-      text-align: center;
-    }
-    .btn-primary {
-      background: #f43f5e;
-      color: white;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 600;
-      width: 100%;
-      margin-top: 10px;
-    }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      padding: 20px;
-      overflow-y: auto;
-    }
-    .gallery-img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 16px;
-    }
+    .next-unlock-bar { height: 2px; background: #fff1f2; margin: 8px 24px; border-radius: 2px; overflow: hidden; }
+    .next-unlock-fill { height: 100%; background: #fca5a5; transition: width 1s linear; }
+    .image-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; }
+    .modal-img { max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 8px; }
+    .lock-screen { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; }
   </style>
   <title>Tranquila, Mayerli</title>
 </head>
@@ -169,20 +40,13 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useRef } = React;
 
     const IMAGES = [
-      { id: 1, file: "1.png" },
-      { id: 2, file: "2.png" },
-      { id: 3, file: "3.png" },
-      { id: 4, file: "4.png" },
-      { id: 5, file: "5.png" },
-      { id: 6, file: "6.png" },
-      { id: 7, file: "7.png" },
-      { id: 8, file: "8.png" },
-      { id: 9, file: "9.png" },
-      { id: 10, file: "10.png" },
-      { id: 11, file: "11.png", description: "Todo estará bien, estamos juntos en esto 💕" }
+      { id: 1, file: "1.png" }, { id: 2, file: "2.png" }, { id: 3, file: "3.png" },
+      { id: 4, file: "4.png" }, { id: 5, file: "5.png" }, { id: 6, file: "6.png" },
+      { id: 7, file: "7.png" }, { id: 8, file: "8.png" }, { id: 9, file: "9.png" },
+      { id: 10, file: "10.png" }, { id: 11, file: "11.png", description: "Todo estará bien, estamos juntos en esto 💕" }
     ];
 
     const MESSAGES = [
@@ -199,100 +63,65 @@
       "Pase lo que pase a las 12, aquí estaré. Como tu amigo y como alguien que te admira. No estás sola en esta espera."
     ];
 
-    const AFFECTION_PHRASES = [
-      "Te quiero mucho", "Eres muy valiente", "Te extraño", "Eres magnífica", 
-      "No estás sola", "Confío en ti", "Eres luz", "Todo estará bien", 
-      "Eres una guerrera", "Aquí estoy contigo", "Eres especial"
-    ];
-
+    const AFFECTION_PHRASES = ["Te quiero mucho", "Eres muy valiente", "Te extraño", "Eres magnífica", "No estás sola", "Confío en ti", "Eres luz", "Todo estará bien", "Eres una guerrera", "Aquí estoy contigo", "Eres especial"];
     const SECRET_PASSWORD = "200104";
 
     function App() {
       const [now, setNow] = useState(new Date());
+      const [currentSlide, setCurrentSlide] = useState(0);
       const [password, setPassword] = useState('');
       const [unlocked, setUnlocked] = useState(false);
       const [devMode, setDevMode] = useState(false);
-      const [currentSlide, setCurrentSlide] = useState(0);
+      const [zoomedImg, setZoomedImg] = useState(null);
 
       useEffect(() => {
         const timer = setInterval(() => setNow(new Date()), 1000);
+        const savedSlide = localStorage.getItem('mayerli_last_slide');
+        if (savedSlide) setCurrentSlide(parseInt(savedSlide));
         return () => clearInterval(timer);
       }, []);
 
       useEffect(() => {
-        const handleKeyDown = (e) => {
-          if (e.key === '|' || e.key === '\\') setDevMode(prev => !prev);
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        localStorage.setItem('mayerli_last_slide', currentSlide);
+      }, [currentSlide]);
+
+      useEffect(() => {
+        const handleKeys = (e) => { if (e.key === '|' || e.key === '\\') setDevMode(p => !p); };
+        window.addEventListener('keydown', handleKeys);
+        return () => window.removeEventListener('keydown', handleKeys);
       }, []);
 
-      const getStartTime = () => {
-        const d = new Date(now);
-        d.setHours(20, 20, 0, 0);
-        return d;
-      };
-
-      const getEndTime = () => {
-        const d = new Date(now);
-        d.setHours(23, 59, 59, 999);
-        return d;
-      };
-
-      const startTime = getStartTime();
-      const endTime = getEndTime();
-
-      const formatCountdown = () => {
-        const diff = endTime - now;
-        if (diff <= 0) return "00:00:00";
-        const h = Math.floor(diff / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        const s = Math.floor((diff % 60000) / 1000);
-        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-      };
-
+      const startTime = new Date(now).setHours(20, 20, 0, 0);
+      const endTime = new Date(now).setHours(23, 59, 59, 999);
       const schedule = [];
       for (let i = 0; i < 22; i++) {
         if (i % 2 === 0) schedule.push({ type: 'image', content: IMAGES[i / 2] });
         else schedule.push({ type: 'message', content: MESSAGES[(i - 1) / 2] });
       }
 
-      let visibleCount = devMode ? schedule.length : Math.min(Math.floor((now - startTime) / 600000) + 1, schedule.length);
-      if (now < startTime && !devMode) visibleCount = 0;
+      const msInTenMin = 600000;
+      const elapsedMs = now - startTime;
+      const visibleCount = devMode ? schedule.length : Math.max(0, Math.min(Math.floor(elapsedMs / msInTenMin) + 1, schedule.length));
+      
+      const nextUnlockProgress = visibleCount < schedule.length ? ((elapsedMs % msInTenMin) / msInTenMin) * 100 : 100;
+
+      const formatCountdown = () => {
+        const diff = endTime - now;
+        if (diff <= 0) return "00:00:00";
+        const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      };
 
       if (now < startTime && !devMode) {
-        return (
-          <div className="lock-screen">
-            <i className="fas fa-heart text-5xl text-pink-300 mb-4"></i>
-            <h1 className="text-2xl font-bold text-gray-800">Casi listos</h1>
-            <p className="text-gray-500 mt-2">Vuelve a las 20:20. Aquí te espero para acompañarte 💖</p>
-          </div>
-        );
+        return <div className="lock-screen"><i className="fas fa-heart text-5xl text-pink-300 mb-4"></i><h1 className="text-2xl font-bold text-gray-800">Casi listos</h1><p className="text-gray-500 mt-2">Vuelve a las 20:20 💖</p></div>;
       }
 
       if (now >= endTime && !unlocked && !devMode) {
-        return (
-          <div className="lock-screen">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">Ya llegó el momento</h1>
-            <p className="text-gray-500 mb-6">Todo va a estar bien. Ingresa el código para ver tus recuerdos guardados.</p>
-            <form onSubmit={(e) => { e.preventDefault(); password === SECRET_PASSWORD ? setUnlocked(true) : alert('Incorrecto'); }} className="w-full">
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" className="w-full p-4 border rounded-xl text-center mb-2" />
-              <button className="btn-primary">Desbloquear</button>
-            </form>
-          </div>
-        );
+        return <div className="lock-screen"><h1 className="text-2xl font-bold mb-4">Ya llegó el momento</h1><form onSubmit={(e) => { e.preventDefault(); password === SECRET_PASSWORD ? setUnlocked(true) : alert('Incorrecto'); }} className="w-full"><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" className="w-full p-4 border rounded-xl text-center mb-2" /><button className="w-full bg-pink-500 text-white p-4 rounded-xl font-bold">Desbloquear</button></form></div>;
       }
 
       if (unlocked || (devMode && unlocked)) {
-        return (
-          <div className="story-container">
-            <div className="header"><span className="header-left">✨ Tus Recuerdos</span></div>
-            <div className="gallery-grid">
-              {IMAGES.map(img => <img key={img.id} src={img.file} className="gallery-img" onError={(e) => e.target.src='https://via.placeholder.com/300?text=Foto'} />)}
-            </div>
-            <div className="p-6 italic text-pink-600 text-center text-sm">Eres increíble, Mayerli. Nunca lo olvides. 💕</div>
-          </div>
-        );
+        return <div className="story-container"><div className="header"><span className="header-left">✨ Tus Recuerdos</span></div><div className="gallery-grid">{IMAGES.map(img => <img key={img.id} src={img.file} onClick={() => setZoomedImg(img.file)} className="gallery-img cursor-pointer" />)}</div></div>;
       }
 
       const currentEvent = schedule[currentSlide] || schedule[0];
@@ -300,38 +129,28 @@
 
       return (
         <div className="story-container">
+          {zoomedImg && <div className="image-modal" onClick={() => setZoomedImg(null)}><img src={zoomedImg} className="modal-img" /></div>}
           <div className="header">
             <span className="header-left">{headerText}</span>
-            <div className="countdown-timer">
-              <i className="fas fa-hourglass-half mr-2 text-[10px]"></i>
-              {formatCountdown()}
-            </div>
+            <div className="countdown-timer"><i className="fas fa-clock mr-2"></i>{formatCountdown()}</div>
           </div>
-          <div className="progress-dots">
-            {schedule.slice(0, visibleCount).map((_, i) => <div key={i} className={`dot ${i === currentSlide ? 'active' : ''}`} />)}
-          </div>
+          <div className="progress-dots">{schedule.slice(0, visibleCount).map((_, i) => <div key={i} className={`dot ${i === currentSlide ? 'active' : ''}`} />)}</div>
+          {visibleCount < schedule.length && <div className="next-unlock-bar"><div className="next-unlock-fill" style={{ width: `${nextUnlockProgress}%` }}></div></div>}
 
           <div className="story-slide">
             {currentEvent.type === 'image' ? (
               <div className="w-full">
-                <img src={currentEvent.content.file} className="story-image" onError={(e) => e.target.src='https://via.placeholder.com/400?text=Cargando...'} />
+                <img src={currentEvent.content.file} onClick={() => setZoomedImg(currentEvent.content.file)} className="story-image" />
                 {currentEvent.content.description && <p className="text-pink-500 font-semibold italic mt-2">{currentEvent.content.description}</p>}
               </div>
-            ) : (
-              <div className="story-message">{currentEvent.content}</div>
-            )}
+            ) : <div className="story-message">{currentEvent.content}</div>}
           </div>
 
           {currentSlide > 0 && <button onClick={() => setCurrentSlide(currentSlide - 1)} className="nav-button left"><i className="fas fa-chevron-left"></i></button>}
           {currentSlide < visibleCount - 1 && <button onClick={() => setCurrentSlide(currentSlide + 1)} className="nav-button right"><i className="fas fa-chevron-right"></i></button>}
-          
-          <div className="p-4 text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-            Falta poco para que estés tranquila
-          </div>
         </div>
       );
     }
-
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
