@@ -2,37 +2,73 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="shortcut icon" href="favicon.png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    * { font-family: 'Montserrat', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #fff5f7; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    #root { width: 100%; height: 100%; max-width: 450px; background: white; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); position: relative; }
-    .story-container { height: 100%; display: flex; flex-direction: column; position: relative; background: #fff; }
-    .story-slide { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center; animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-    .story-image { width: 100%; max-height: 55vh; object-fit: cover; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); margin-bottom: 20px; cursor: zoom-in; }
-    .story-message { font-size: 1.1rem; line-height: 1.6; color: #374151; background: #fff1f2; padding: 25px; border-radius: 24px; border: 1px solid #ffe4e6; }
-    .nav-button { position: absolute; top: 50%; transform: translateY(-50%); width: 45px; height: 45px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #f43f5e; z-index: 50; border: 1px solid rgba(244, 63, 94, 0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .nav-button.left { left: 12px; } .nav-button.right { right: 12px; }
-    .header { padding: 20px 24px 10px; display: flex; justify-content: space-between; align-items: center; }
-    .header-left { font-weight: 700; color: #f43f5e; font-size: 0.95rem; }
-    .countdown-timer { background: #fdf2f8; color: #f43f5e; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; border: 1px solid #fbcfe8; }
-    .progress-dots { display: flex; gap: 4px; padding: 0 24px; margin-top: 5px; }
-    .dot { height: 4px; flex: 1; background: #ffe4e6; border-radius: 2px; }
-    .dot.active { background: #f43f5e; }
-    .next-unlock-bar { height: 2px; background: #fff1f2; margin: 8px 24px; border-radius: 2px; overflow: hidden; }
+    * { font-family: 'Montserrat', sans-serif; box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
+    body { background: #000; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    #root { width: 100%; height: 100%; max-width: 450px; background: white; position: relative; display: flex; flex-direction: column; }
+    
+    .story-container { flex: 1; display: flex; flex-direction: column; position: relative; height: 100%; overflow: hidden; }
+    
+    .story-slide { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      padding: 30px; 
+      text-align: center; 
+      width: 100%;
+      height: 100%;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .story-image { width: 100%; max-height: 60vh; object-fit: cover; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); cursor: zoom-in; }
+    
+    .special-photo { border: 4px solid #f43f5e; padding: 5px; background: white; animation: pulseGlow 2s infinite; }
+    @keyframes pulseGlow { 0% { box-shadow: 0 0 10px #f43f5e; } 50% { box-shadow: 0 0 25px #f43f5e; } 100% { box-shadow: 0 0 10px #f43f5e; } }
+
+    .story-message { 
+      font-size: 1.2rem; 
+      line-height: 1.8; 
+      color: #1f2937; 
+      background: #fff1f2; 
+      padding: 35px 25px; 
+      border-radius: 32px; 
+      border: 1px solid #ffe4e6;
+      width: 100%;
+      box-shadow: 0 10px 20px rgba(244, 63, 94, 0.05);
+    }
+
+    .header { padding: 25px 24px 15px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+    .header-left { font-weight: 700; color: #f43f5e; font-size: 1rem; }
+    .countdown-timer { background: #fdf2f8; color: #f43f5e; padding: 6px 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 700; border: 1px solid #fbcfe8; }
+    
+    .progress-dots { display: flex; gap: 5px; padding: 0 24px; margin-bottom: 10px; }
+    .dot { height: 4px; flex: 1; background: #ffe4e6; border-radius: 10px; }
+    .dot.active { background: #f43f5e; transition: background 0.3s; }
+
+    .next-unlock-bar { height: 3px; background: #fff1f2; margin: 0 24px 15px; border-radius: 10px; overflow: hidden; }
     .next-unlock-fill { height: 100%; background: #fca5a5; transition: width 1s linear; }
-    .image-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; }
-    .modal-img { max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 8px; }
-    .lock-screen { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; }
+
+    .image-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+    .modal-img { max-width: 100%; max-height: 80vh; object-fit: contain; border-radius: 12px; }
+    
+    .modal-controls { position: absolute; bottom: 40px; display: flex; gap: 20px; }
+    .modal-btn { background: white; color: #000; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    .btn-download { background: #f43f5e; color: white; }
+
+    .nav-button { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #f43f5e; z-index: 50; border: 1px solid #ffe4e6; }
+    .nav-button.left { left: 10px; } .nav-button.right { right: 10px; }
   </style>
   <title>Tranquila, Mayerli</title>
 </head>
@@ -40,13 +76,13 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect } = React;
 
     const IMAGES = [
       { id: 1, file: "1.png" }, { id: 2, file: "2.png" }, { id: 3, file: "3.png" },
       { id: 4, file: "4.png" }, { id: 5, file: "5.png" }, { id: 6, file: "6.png" },
       { id: 7, file: "7.png" }, { id: 8, file: "8.png" }, { id: 9, file: "9.png" },
-      { id: 10, file: "10.png" }, { id: 11, file: "11.png", description: "Todo estará bien, estamos juntos en esto 💕" }
+      { id: 10, file: "10.png" }, { id: 11, file: "11.png", special: true, description: "Nuestra primera foto juntos 💕" }
     ];
 
     const MESSAGES = [
@@ -56,14 +92,14 @@
       "Tú eres una mujer magnífica: trabajas, eres una cristiana íntegra y te preocupas por todos. Eso es lo que realmente te define.",
       "Me duele que pases por esto porque no lo mereces. Pero confío plenamente en quién eres, así como confío en Dios. La verdad siempre sale a la luz.",
       "No permitas que los pensamientos negativos te quiten la paz. Eres una gran amiga para Thalia, Diale y Jorge. Todos vemos tu luz.",
-      "Eres auténtica y honesta. Cualquier error o malentendido no cambia el corazón tan noble que tienes. Mantente firme.",
+      "Eres auténtica y honesta. Cualquier malentendido no cambia el corazón tan noble que tienes. Mantente firme.",
       "Cuando hables con tu hermano, hazlo desde tu paz. No eres 'inútil' ni 'menor'; eres una mujer capaz que sabe enfrentar los problemas.",
       "Recuerda los momentos en los que te has sentido libre y feliz. Esa es tu realidad, esta angustia es solo una nube que ya va a pasar.",
       "Te quiero muchísimo. Me importas de verdad y oraré por ti en cada momento. Solo quiero que vuelvas a sonreír tranquila.",
-      "Pase lo que pase a las 12, aquí estaré. Como tu amigo y como alguien que te admira. No estás sola en esta espera."
+      "Pase lo que pase a las 12, aquí estaré. Como tu amigo y como alguien que te admira profundamente. No estás sola."
     ];
 
-    const AFFECTION_PHRASES = ["Te quiero mucho", "Eres muy valiente", "Te extraño", "Eres magnífica", "No estás sola", "Confío en ti", "Eres luz", "Todo estará bien", "Eres una guerrera", "Aquí estoy contigo", "Eres especial"];
+    const AFFECTION_PHRASES = ["Te quiero mucho", "Eres muy valiente", "Eres magnífica", "No estás sola", "Confío en ti", "Eres luz", "Todo estará bien", "Eres especial"];
     const SECRET_PASSWORD = "200104";
 
     function App() {
@@ -76,20 +112,29 @@
 
       useEffect(() => {
         const timer = setInterval(() => setNow(new Date()), 1000);
-        const savedSlide = localStorage.getItem('mayerli_last_slide');
-        if (savedSlide) setCurrentSlide(parseInt(savedSlide));
+        const saved = localStorage.getItem('mayerli_slide');
+        if (saved) setCurrentSlide(parseInt(saved));
         return () => clearInterval(timer);
       }, []);
 
       useEffect(() => {
-        localStorage.setItem('mayerli_last_slide', currentSlide);
+        localStorage.setItem('mayerli_slide', currentSlide);
       }, [currentSlide]);
 
-      useEffect(() => {
-        const handleKeys = (e) => { if (e.key === '|' || e.key === '\\') setDevMode(p => !p); };
-        window.addEventListener('keydown', handleKeys);
-        return () => window.removeEventListener('keydown', handleKeys);
-      }, []);
+      const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        }
+      };
+
+      const downloadImg = (url) => {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `recuerdo_${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
 
       const startTime = new Date(now).setHours(20, 20, 0, 0);
       const endTime = new Date(now).setHours(23, 59, 59, 999);
@@ -100,54 +145,56 @@
       }
 
       const msInTenMin = 600000;
-      const elapsedMs = now - startTime;
-      const visibleCount = devMode ? schedule.length : Math.max(0, Math.min(Math.floor(elapsedMs / msInTenMin) + 1, schedule.length));
-      
-      const nextUnlockProgress = visibleCount < schedule.length ? ((elapsedMs % msInTenMin) / msInTenMin) * 100 : 100;
+      const visibleCount = devMode ? schedule.length : Math.max(0, Math.min(Math.floor((now - startTime) / msInTenMin) + 1, schedule.length));
+      const nextProgress = visibleCount < schedule.length ? (((now - startTime) % msInTenMin) / msInTenMin) * 100 : 100;
 
       const formatCountdown = () => {
-        const diff = endTime - now;
-        if (diff <= 0) return "00:00:00";
+        const diff = Math.max(0, endTime - now);
         const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
         return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
       };
 
-      if (now < startTime && !devMode) {
-        return <div className="lock-screen"><i className="fas fa-heart text-5xl text-pink-300 mb-4"></i><h1 className="text-2xl font-bold text-gray-800">Casi listos</h1><p className="text-gray-500 mt-2">Vuelve a las 20:20 💖</p></div>;
-      }
-
-      if (now >= endTime && !unlocked && !devMode) {
-        return <div className="lock-screen"><h1 className="text-2xl font-bold mb-4">Ya llegó el momento</h1><form onSubmit={(e) => { e.preventDefault(); password === SECRET_PASSWORD ? setUnlocked(true) : alert('Incorrecto'); }} className="w-full"><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" className="w-full p-4 border rounded-xl text-center mb-2" /><button className="w-full bg-pink-500 text-white p-4 rounded-xl font-bold">Desbloquear</button></form></div>;
-      }
-
-      if (unlocked || (devMode && unlocked)) {
-        return <div className="story-container"><div className="header"><span className="header-left">✨ Tus Recuerdos</span></div><div className="gallery-grid">{IMAGES.map(img => <img key={img.id} src={img.file} onClick={() => setZoomedImg(img.file)} className="gallery-img cursor-pointer" />)}</div></div>;
-      }
+      if (now < startTime && !devMode) return <div className="p-10 text-center bg-white h-screen flex flex-col justify-center items-center"><i className="fas fa-heart text-pink-300 text-5xl mb-4"></i><h1 className="text-2xl font-bold">Casi es hora</h1><p className="text-gray-500 mt-2">Vuelve a las 20:20 💖</p></div>;
 
       const currentEvent = schedule[currentSlide] || schedule[0];
-      const headerText = AFFECTION_PHRASES[currentSlide % AFFECTION_PHRASES.length];
 
       return (
-        <div className="story-container">
-          {zoomedImg && <div className="image-modal" onClick={() => setZoomedImg(null)}><img src={zoomedImg} className="modal-img" /></div>}
+        <div id="main-app" className="story-container" onClick={toggleFullscreen}>
+          {zoomedImg && (
+            <div className="image-modal" onClick={() => setZoomedImg(null)}>
+              <img src={zoomedImg} className="modal-img" onClick={(e) => e.stopPropagation()} />
+              <div className="modal-controls">
+                <button className="modal-btn" onClick={() => setZoomedImg(null)}><i className="fas fa-times"></i></button>
+                <button className="modal-btn btn-download" onClick={(e) => { e.stopPropagation(); downloadImg(zoomedImg); }}><i className="fas fa-download"></i></button>
+              </div>
+            </div>
+          )}
+
           <div className="header">
-            <span className="header-left">{headerText}</span>
-            <div className="countdown-timer"><i className="fas fa-clock mr-2"></i>{formatCountdown()}</div>
+            <span className="header-left">{AFFECTION_PHRASES[currentSlide % AFFECTION_PHRASES.length]}</span>
+            <div className="countdown-timer"><i className="fas fa-hourglass-start mr-2"></i>{formatCountdown()}</div>
           </div>
+
           <div className="progress-dots">{schedule.slice(0, visibleCount).map((_, i) => <div key={i} className={`dot ${i === currentSlide ? 'active' : ''}`} />)}</div>
-          {visibleCount < schedule.length && <div className="next-unlock-bar"><div className="next-unlock-fill" style={{ width: `${nextUnlockProgress}%` }}></div></div>}
+          {visibleCount < schedule.length && <div className="next-unlock-bar"><div className="next-unlock-fill" style={{ width: `${nextProgress}%` }}></div></div>}
 
           <div className="story-slide">
             {currentEvent.type === 'image' ? (
-              <div className="w-full">
-                <img src={currentEvent.content.file} onClick={() => setZoomedImg(currentEvent.content.file)} className="story-image" />
-                {currentEvent.content.description && <p className="text-pink-500 font-semibold italic mt-2">{currentEvent.content.description}</p>}
+              <div className="w-full flex flex-col items-center">
+                <img 
+                  src={currentEvent.content.file} 
+                  onClick={() => setZoomedImg(currentEvent.content.file)} 
+                  className={`story-image ${currentEvent.content.special ? 'special-photo' : ''}`} 
+                />
+                {currentEvent.content.description && <p className="text-pink-600 font-bold italic mt-4 text-lg">{currentEvent.content.description}</p>}
               </div>
             ) : <div className="story-message">{currentEvent.content}</div>}
           </div>
 
-          {currentSlide > 0 && <button onClick={() => setCurrentSlide(currentSlide - 1)} className="nav-button left"><i className="fas fa-chevron-left"></i></button>}
-          {currentSlide < visibleCount - 1 && <button onClick={() => setCurrentSlide(currentSlide + 1)} className="nav-button right"><i className="fas fa-chevron-right"></i></button>}
+          {currentSlide > 0 && <button onClick={(e) => { e.stopPropagation(); setCurrentSlide(currentSlide - 1); }} className="nav-button left"><i className="fas fa-chevron-left"></i></button>}
+          {currentSlide < visibleCount - 1 && <button onClick={(e) => { e.stopPropagation(); setCurrentSlide(currentSlide + 1); }} className="nav-button right"><i className="fas fa-chevron-right"></i></button>}
+          
+          <div className="p-4 text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest opacity-50">Toca para sumergirte en el modo completo</div>
         </div>
       );
     }
