@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <link rel="shortcut icon" href="favicon.png">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * {
+      font-family: 'Montserrat', sans-serif;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #fff5f7;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #root {
+      width: 100%;
+      height: 100%;
+      max-width: 450px;
+      background: white;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    .story-container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: #fff;
+    }
+    .story-slide {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .story-image {
+      width: 100%;
+      max-height: 55vh;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .story-message {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #374151;
+      background: #fff1f2;
+      padding: 25px;
+      border-radius: 24px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+      border: 1px solid #ffe4e6;
+    }
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 45px;
+      height: 45px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(5px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f43f5e;
+      z-index: 50;
+      border: 1px solid rgba(244, 63, 94, 0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .nav-button:active { transform: translateY(-50%) scale(0.9); }
+    .nav-button.left { left: 12px; }
+    .nav-button.right { right: 12px; }
+    
+    .header {
+      padding: 20px 24px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-left {
+      font-weight: 700;
+      color: #f43f5e;
+      font-size: 0.95rem;
+    }
+    .countdown-timer {
+      background: #fdf2f8;
+      color: #f43f5e;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid #fbcfe8;
+    }
+    .progress-dots {
+      display: flex;
+      gap: 4px;
+      padding: 0 24px;
+      margin-top: 5px;
+    }
+    .dot {
+      height: 4px;
+      flex: 1;
+      background: #ffe4e6;
+      border-radius: 2px;
+    }
+    .dot.active { background: #f43f5e; }
+
+    .lock-screen {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      background: linear-gradient(135deg, #fff 0%, #fff1f2 100%);
+      text-align: center;
+    }
+    .btn-primary {
+      background: #f43f5e;
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .gallery-img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+  </style>
+  <title>Tranquila, Mayerli</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const IMAGES = [
+      { id: 1, file: "1.png" },
+      { id: 2, file: "2.png" },
+      { id: 3, file: "3.png" },
+      { id: 4, file: "4.png" },
+      { id: 5, file: "5.png" },
+      { id: 6, file: "6.png" },
+      { id: 7, file: "7.png" },
+      { id: 8, file: "8.png" },
+      { id: 9, file: "9.png" },
+      { id: 10, file: "10.png" },
+      { id: 11, file: "11.png", description: "Todo estará bien, estamos juntos en esto 💕" }
+    ];
+
+    const MESSAGES = [
+      "Mayerli, quiero que sepas que no estás sola. Pase lo que pase hoy, yo estoy aquí contigo. Respira profundo, todo saldrá bien.",
+      "Tu relación con Isaí es importante y sé cuánto te esfuerzas por cuidarla. Esa dedicación habla de lo valiosa que eres. No dejes que la ansiedad te nuble.",
+      "Mi mamá no piensa mal de ti, te lo aseguro. Si llamó a Isaí fue por una confusión de números, no por juzgarte. No tienes de qué avergonzarte.",
+      "Tú eres una mujer magnífica: trabajas, eres una cristiana íntegra y te preocupas por todos. Eso es lo que realmente te define.",
+      "Me duele que pases por esto porque no lo mereces. Pero confío plenamente en quién eres, así como confío en Dios. La verdad siempre sale a la luz.",
+      "No permitas que los pensamientos negativos te quiten la paz. Eres una gran amiga para Thalia, Diale y Jorge. Todos vemos tu luz.",
+      "Eres auténtica y honesta. Cualquier error o malentendido no cambia el corazón tan noble que tienes. Mantente firme.",
+      "Cuando hables con tu hermano, hazlo desde tu paz. No eres 'inútil' ni 'menor'; eres una mujer capaz que sabe enfrentar los problemas.",
+      "Recuerda los momentos en los que te has sentido libre y feliz. Esa es tu realidad, esta angustia es solo una nube que ya va a pasar.",
+      "Te quiero muchísimo. Me importas de verdad y oraré por ti en cada momento. Solo quiero que vuelvas a sonreír tranquila.",
+      "Pase lo que pase a las 12, aquí estaré. Como tu amigo y como alguien que te admira. No estás sola en esta espera."
+    ];
+
+    const AFFECTION_PHRASES = [
+      "Te quiero mucho", "Eres muy valiente", "Te extraño", "Eres magnífica", 
+      "No estás sola", "Confío en ti", "Eres luz", "Todo estará bien", 
+      "Eres una guerrera", "Aquí estoy contigo", "Eres especial"
+    ];
+
+    const SECRET_PASSWORD = "200104";
+
+    function App() {
+      const [now, setNow] = useState(new Date());
+      const [password, setPassword] = useState('');
+      const [unlocked, setUnlocked] = useState(false);
+      const [devMode, setDevMode] = useState(false);
+      const [currentSlide, setCurrentSlide] = useState(0);
+
+      useEffect(() => {
+        const timer = setInterval(() => setNow(new Date()), 1000);
+        return () => clearInterval(timer);
+      }, []);
+
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.key === '|' || e.key === '\\') setDevMode(prev => !prev);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, []);
+
+      const getStartTime = () => {
+        const d = new Date(now);
+        d.setHours(20, 20, 0, 0);
+        return d;
+      };
+
+      const getEndTime = () => {
+        const d = new Date(now);
+        d.setHours(23, 59, 59, 999);
+        return d;
+      };
+
+      const startTime = getStartTime();
+      const endTime = getEndTime();
+
+      const formatCountdown = () => {
+        const diff = endTime - now;
+        if (diff <= 0) return "00:00:00";
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      };
+
+      const schedule = [];
+      for (let i = 0; i < 22; i++) {
+        if (i % 2 === 0) schedule.push({ type: 'image', content: IMAGES[i / 2] });
+        else schedule.push({ type: 'message', content: MESSAGES[(i - 1) / 2] });
+      }
+
+      let visibleCount = devMode ? schedule.length : Math.min(Math.floor((now - startTime) / 600000) + 1, schedule.length);
+      if (now < startTime && !devMode) visibleCount = 0;
+
+      if (now < startTime && !devMode) {
+        return (
+          <div className="lock-screen">
+            <i className="fas fa-heart text-5xl text-pink-300 mb-4"></i>
+            <h1 className="text-2xl font-bold text-gray-800">Casi listos</h1>
+            <p className="text-gray-500 mt-2">Vuelve a las 20:20. Aquí te espero para acompañarte 💖</p>
+          </div>
+        );
+      }
+
+      if (now >= endTime && !unlocked && !devMode) {
+        return (
+          <div className="lock-screen">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">Ya llegó el momento</h1>
+            <p className="text-gray-500 mb-6">Todo va a estar bien. Ingresa el código para ver tus recuerdos guardados.</p>
+            <form onSubmit={(e) => { e.preventDefault(); password === SECRET_PASSWORD ? setUnlocked(true) : alert('Incorrecto'); }} className="w-full">
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" className="w-full p-4 border rounded-xl text-center mb-2" />
+              <button className="btn-primary">Desbloquear</button>
+            </form>
+          </div>
+        );
+      }
+
+      if (unlocked || (devMode && unlocked)) {
+        return (
+          <div className="story-container">
+            <div className="header"><span className="header-left">✨ Tus Recuerdos</span></div>
+            <div className="gallery-grid">
+              {IMAGES.map(img => <img key={img.id} src={img.file} className="gallery-img" onError={(e) => e.target.src='https://via.placeholder.com/300?text=Foto'} />)}
+            </div>
+            <div className="p-6 italic text-pink-600 text-center text-sm">Eres increíble, Mayerli. Nunca lo olvides. 💕</div>
+          </div>
+        );
+      }
+
+      const currentEvent = schedule[currentSlide] || schedule[0];
+      const headerText = AFFECTION_PHRASES[currentSlide % AFFECTION_PHRASES.length];
+
+      return (
+        <div className="story-container">
+          <div className="header">
+            <span className="header-left">{headerText}</span>
+            <div className="countdown-timer">
+              <i className="fas fa-hourglass-half mr-2 text-[10px]"></i>
+              {formatCountdown()}
+            </div>
+          </div>
+          <div className="progress-dots">
+            {schedule.slice(0, visibleCount).map((_, i) => <div key={i} className={`dot ${i === currentSlide ? 'active' : ''}`} />)}
+          </div>
+
+          <div className="story-slide">
+            {currentEvent.type === 'image' ? (
+              <div className="w-full">
+                <img src={currentEvent.content.file} className="story-image" onError={(e) => e.target.src='https://via.placeholder.com/400?text=Cargando...'} />
+                {currentEvent.content.description && <p className="text-pink-500 font-semibold italic mt-2">{currentEvent.content.description}</p>}
+              </div>
+            ) : (
+              <div className="story-message">{currentEvent.content}</div>
+            )}
+          </div>
+
+          {currentSlide > 0 && <button onClick={() => setCurrentSlide(currentSlide - 1)} className="nav-button left"><i className="fas fa-chevron-left"></i></button>}
+          {currentSlide < visibleCount - 1 && <button onClick={() => setCurrentSlide(currentSlide + 1)} className="nav-button right"><i className="fas fa-chevron-right"></i></button>}
+          
+          <div className="p-4 text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+            Falta poco para que estés tranquila
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
