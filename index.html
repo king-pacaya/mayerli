@@ -26,7 +26,7 @@
     .timer-blink { animation: pulse 2s infinite; color: #ff4d6d; font-weight: 800; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-    /* Galería Estilos */
+    /* Galería */
     .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .gallery-item-wrapper { width: 100%; aspect-ratio: 1/1; border-radius: 20px; overflow: hidden; border: 2px solid #fff0f3; cursor: pointer; position: relative; }
     .gallery-item-wrapper img, .gallery-item-wrapper video { width: 100%; height: 100%; object-fit: cover; }
@@ -44,10 +44,15 @@
   <div class="max-w-md mx-auto px-6 py-10 text-center">
     <header class="mb-8">
       <h1 id="view-title" class="text-4xl font-bold text-[#ff758f]">Inicio</h1>
-      <p class="text-sm font-semibold text-[#8e7d83] mt-2">Mayerli • Medicina • Científica del Sur</p>
+      <p class="text-sm font-semibold text-[#8e7d83] mt-2">Medicina • Científica del Sur</p>
     </header>
 
     <section id="view-home" class="view-section active text-left">
+      <div id="home-greeting" class="mb-8 px-2">
+        <h2 id="greeting-text" class="text-xl font-bold text-[#4a444c]"></h2>
+        <p id="greeting-date" class="text-sm text-[#ff8fa3] font-semibold"></p>
+      </div>
+
       <div class="space-y-6">
         <div id="container-current" class="card-cute p-6">
           <div class="flex items-center gap-2 mb-4">
@@ -137,6 +142,8 @@
     let currentGallery = [];
     let lightBoxIdx = 0;
 
+    const tabTitles = { 'home': 'Inicio', 'schedule': 'Horario', 'courses': 'Cursos', 'gallery': 'Galería' };
+
     function parseTime(timeStr) {
       const [h, m] = timeStr.split(':').map(Number);
       const d = new Date(); d.setHours(h, m, 0, 0); return d;
@@ -154,26 +161,35 @@
       return `${prefix} ${secs}s`; 
     }
 
-    // MAPEO DE TÍTULOS DINÁMICOS
-    const tabTitles = {
-        'home': 'Inicio',
-        'schedule': 'Horario',
-        'courses': 'Cursos',
-        'gallery': 'Galería'
-    };
+    // GESTIÓN DEL SALUDO
+    function updateGreeting() {
+        const now = new Date();
+        const hour = now.getHours();
+        let greet = "";
+        
+        if (hour >= 0 && hour < 12) greet = "Buenos días";
+        else if (hour >= 12 && hour < 18) greet = "Buenas tardes";
+        else greet = "Buenas noches";
+
+        document.getElementById('greeting-text').textContent = `${greet}, Mayerli 🌸`;
+        
+        const options = { weekday: 'long', day: 'numeric', month: 'long' };
+        let dateStr = now.toLocaleDateString('es-ES', options);
+        document.getElementById('greeting-date').textContent = `Hoy es ${dateStr.charAt(0).toUpperCase() + dateStr.slice(1)}`;
+    }
 
     function switchTab(tab) {
-      // Cambio de título dinámico
+      localStorage.setItem('selectedTab', tab); // Guardar en localStorage
       document.getElementById('view-title').textContent = tabTitles[tab];
-
       document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
       document.getElementById('view-' + tab).classList.add('active');
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('btn-' + tab).classList.add('active');
+      
       if(tab === 'schedule') renderSchedule();
       else if(tab === 'courses') renderCourses();
       else if(tab === 'gallery') renderGallery();
-      else updateHome();
+      else { updateHome(); updateGreeting(); }
     }
 
     function updateHome() {
@@ -231,9 +247,19 @@
     function renderSchedule() {
       const now = new Date();
       const dayName = diasSemana[viewDate.getDay()];
-      const isToday = viewDate.toDateString() === realToday.toDateString();
-      document.getElementById('day-title').textContent = isToday ? "Hoy" : dayName;
+      
+      // Lógica de Hoy, Ayer, Mañana
+      const diffTime = viewDate.setHours(0,0,0,0) - realToday.setHours(0,0,0,0);
+      const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+      
+      let label = dayName;
+      if(diffDays === 0) label = "Hoy";
+      else if(diffDays === 1) label = "Mañana";
+      else if(diffDays === -1) label = "Ayer";
+
+      document.getElementById('day-title').textContent = label;
       document.getElementById('day-date').textContent = viewDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+
       const list = document.getElementById('daily-schedule-list');
       list.innerHTML = '';
       const clases = data.horario.filter(c => c.dias.includes(dayName)).sort((a, b) => parseTime(a.inicio) - parseTime(b.inicio));
@@ -243,7 +269,7 @@
       }
       clases.forEach(c => {
         const start = parseTime(c.inicio), end = parseTime(c.fin);
-        const isActive = isToday && now >= start && now < end;
+        const isActive = diffDays === 0 && now >= start && now < end;
         list.innerHTML += `
           <div class="card-cute p-5 ${isActive ? 'active-class-highlight' : ''}">
             <div class="flex justify-between items-start mb-3">
@@ -339,9 +365,15 @@
     document.getElementById('prev-day').onclick = () => { viewDate.setDate(viewDate.getDate() - 1); renderSchedule(); };
     document.getElementById('next-day').onclick = () => { viewDate.setDate(viewDate.getDate() + 1); renderSchedule(); };
 
-    updateHome();
+    // Cargar pestaña guardada o defecto
+    window.onload = () => {
+        const savedTab = localStorage.getItem('selectedTab') || 'home';
+        switchTab(savedTab);
+    };
+
     setInterval(() => {
       updateHome();
+      updateGreeting();
       if(document.getElementById('view-schedule').classList.contains('active')) renderSchedule();
     }, 1000);
   </script>
