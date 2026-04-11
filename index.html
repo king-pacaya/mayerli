@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="multimedia/favicon.png">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+  <style>
+    * { font-family: 'Quicksand', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { background-color: #fffafa; padding-bottom: 120px; color: #4a444c; }
+    .progress-bar-container { width: 100%; background-color: #f0e4e6; border-radius: 20px; height: 12px; overflow: hidden; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, #ff9aa2, #ffb7b2); transition: width 1s linear; }
+    .card-cute { background: white; border-radius: 28px; border: 1px solid #ffe5e9; box-shadow: 0 4px 15px rgba(255, 182, 193, 0.15); }
+    .active-class-highlight { border: 2px solid #ffb3c1; background-color: #fff9fa; }
+    .nav-btn { color: #b5a4a7; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .nav-btn.active { color: #ff8fa3; transform: translateY(-8px); }
+    .tag-presencial { background-color: #e2f0d9; color: #3e6127; font-weight: 700; }
+    .tag-virtual { background-color: #d9e2f3; color: #2d4d85; font-weight: 700; }
+    .view-section { display: none; }
+    .view-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .timer-blink { animation: pulse 2s infinite; color: #ff4d6d; font-weight: 800; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    /* Galería Estilos */
+    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .gallery-item-wrapper { width: 100%; aspect-ratio: 1/1; border-radius: 20px; overflow: hidden; border: 2px solid #fff0f3; cursor: pointer; position: relative; }
+    .gallery-item-wrapper img, .gallery-item-wrapper video { width: 100%; height: 100%; object-fit: cover; }
+    .video-badge { position: absolute; top: 8px; right: 8px; background: rgba(255,117,143,0.8); color: white; padding: 4px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+    /* Lightbox */
+    #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+    #lightbox-media-container { max-width: 100%; max-height: 80vh; border-radius: 15px; }
+    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 40px; padding: 20px; cursor: pointer; }
+  </style>
+  <title>Horario</title>
+</head>
+<body>
+
+  <div class="max-w-md mx-auto px-6 py-10 text-center">
+    <header class="mb-8">
+      <h1 id="view-title" class="text-4xl font-bold text-[#ff758f]">Inicio</h1>
+      <p class="text-sm font-semibold text-[#8e7d83] mt-2">Mayerli • Medicina • Científica del Sur</p>
+    </header>
+
+    <section id="view-home" class="view-section active text-left">
+      <div class="space-y-6">
+        <div id="container-current" class="card-cute p-6">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="iconify text-[#ff758f] text-xl" data-icon="solar:stars-minimalistic-bold-duotone"></span>
+            <h2 class="text-xs font-bold uppercase tracking-widest text-[#7a6a6f]">Ahora mismo</h2>
+          </div>
+          <div id="home-current-class"></div>
+        </div>
+        <div id="container-next" class="card-cute p-6 bg-[#fffcfd]">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="iconify text-[#a2d2ff] text-xl" data-icon="solar:skip-next-bold-duotone"></span>
+            <h2 class="text-xs font-bold uppercase tracking-widest text-[#7a6a6f]">Lo que sigue</h2>
+          </div>
+          <div id="home-next-class"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-schedule" class="view-section text-left">
+      <div class="flex items-center justify-between mb-6 bg-white p-3 rounded-3xl shadow-sm border border-[#ffe5e9]">
+        <button id="prev-day" class="p-2 text-[#ff8fa3]"><span class="iconify text-2xl" data-icon="solar:alt-arrow-left-bold"></span></button>
+        <div class="text-center">
+          <h2 class="font-bold text-lg text-[#4a444c]" id="day-title">Hoy</h2>
+          <p class="text-[11px] font-bold uppercase text-[#ff8fa3] tracking-tighter" id="day-date"></p>
+        </div>
+        <button id="next-day" class="p-2 text-[#ff8fa3]"><span class="iconify text-2xl" data-icon="solar:alt-arrow-right-bold"></span></button>
+      </div>
+      <div id="daily-schedule-list" class="space-y-4"></div>
+    </section>
+
+    <section id="view-courses" class="view-section text-left">
+      <div class="mb-6 p-4 bg-white rounded-2xl border border-pink-50 text-center shadow-sm">
+        <span class="text-xs font-bold uppercase text-[#8e7d83] tracking-widest">Total de asignaturas</span>
+        <div class="text-3xl font-bold text-[#ff758f]" id="total-courses-num">0</div>
+      </div>
+      <div id="courses-list" class="space-y-5"></div>
+    </section>
+
+    <section id="view-gallery" class="view-section">
+      <div id="gallery-grid" class="gallery-grid"></div>
+    </section>
+  </div>
+
+  <div id="lightbox">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-3xl"><span class="iconify" data-icon="solar:close-circle-bold"></span></button>
+    <div id="lightbox-media-container" class="w-full flex justify-center items-center"></div>
+    <div onclick="prevMedia()" class="lb-nav left-0"><span class="iconify" data-icon="solar:alt-arrow-left-bold"></span></div>
+    <div onclick="nextMedia()" class="lb-nav right-0"><span class="iconify" data-icon="solar:alt-arrow-right-bold"></span></div>
+  </div>
+
+  <nav class="fixed bottom-6 left-6 right-6 bg-white/95 backdrop-blur-lg border border-[#ffe5e9] h-20 rounded-[35px] shadow-2xl flex justify-around items-center z-50 px-2">
+    <button onclick="switchTab('home')" id="btn-home" class="nav-btn flex flex-col items-center active"><span class="iconify text-2xl" data-icon="solar:home-smile-bold-duotone"></span><span class="text-[9px] font-bold mt-1">INICIO</span></button>
+    <button onclick="switchTab('schedule')" id="btn-schedule" class="nav-btn flex flex-col items-center"><span class="iconify text-2xl" data-icon="solar:calendar-minimalistic-bold-duotone"></span><span class="text-[9px] font-bold mt-1">HORARIO</span></button>
+    <button onclick="switchTab('courses')" id="btn-courses" class="nav-btn flex flex-col items-center"><span class="iconify text-2xl" data-icon="solar:notebook-bold-duotone"></span><span class="text-[9px] font-bold mt-1">CURSOS</span></button>
+    <button onclick="switchTab('gallery')" id="btn-gallery" class="nav-btn flex flex-col items-center"><span class="iconify text-2xl" data-icon="solar:gallery-round-bold-duotone"></span><span class="text-[9px] font-bold mt-1">GALERÍA</span></button>
+  </nav>
+
+  <script>
+    const data = {
+      "horario": [
+        { "nombre": "Química", "dias": ["Lunes"], "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Lab. Química, B-201, Ate 1" },
+        { "nombre": "Química", "dias": ["Lunes"], "inicio": "13:50", "fin": "21:15", "modalidad": "Virtual", "aula": "Plataforma Virtual" },
+        { "nombre": "Introducción a la Medicina", "dias": ["Martes"], "inicio": "08:40", "fin": "09:30", "modalidad": "Virtual", "aula": "Plataforma Virtual" },
+        { "nombre": "Introducción a la Medicina", "dias": ["Martes"], "inicio": "09:30", "fin": "11:10", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
+        { "nombre": "Biología Celular y Molecular", "dias": ["Miércoles"], "inicio": "07:00", "fin": "10:20", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
+        { "nombre": "Lengua y Oratoria", "dias": ["Miércoles"], "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
+        { "nombre": "Biología Celular y Molecular", "dias": ["Jueves"], "inicio": "07:00", "fin": "08:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
+        { "nombre": "Biología Celular y Molecular", "dias": ["Jueves"], "inicio": "08:40", "fin": "10:20", "modalidad": "Presencial", "aula": "Lab B-603, Ate 1" },
+        { "nombre": "Desempeño Universitario", "dias": ["Jueves"], "inicio": "13:40", "fin": "16:10", "modalidad": "Virtual", "aula": "Plataforma Virtual" },
+        { "nombre": "Química", "dias": ["Viernes"], "inicio": "10:20", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
+        { "nombre": "Matemática", "dias": ["Sábado"], "inicio": "08:40", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
+        { "nombre": "Lengua y Oratoria", "dias": ["Sábado"], "inicio": "12:00", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" }
+      ],
+      "detalle_cursos": [
+        { "nombre": "Biología Celular y Molecular", "creditos": 6, "codigo": "1629", "docentes": [ ["Aranguren Sandoval, Yudy Leonor", "yaranguren@cientifica.edu.pe"], ["Castañeda Checa, Erika", "ecastanedac@cientifica.edu.pe"], ["Rivera Ballon, Isabel Lucia", "iriverab@cientifica.edu.pe"] ] },
+        { "nombre": "Introducción a la Medicina", "creditos": 2, "codigo": "1630", "docentes": [ ["Flores Yabar, Jose Roberto", "jfloresy@cientifica.edu.pe"], ["Timana Laveriano, Jessica Khaterine", "100206533@cientifica.edu.pe"] ] },
+        { "nombre": "Química", "creditos": 5, "codigo": "1631", "docentes": [ ["Colombo Ostos, Nina Margarita", "ncolombo@cientifica.edu.pe"], ["Meza Aguilar, Svonnimir", "smezaa@cientifica.edu.pe"] ] },
+        { "nombre": "Matemática", "creditos": 3, "codigo": "1632", "docentes": [ ["Valdivia Lopez, Adolfo Santiago", "avaldivia@cientifica.edu.pe"] ] },
+        { "nombre": "Lengua y Oratoria", "creditos": 3, "codigo": "1633", "docentes": [ ["Collazos Roque, Edith Geovana", "ecollazosro@cientifica.edu.pe"], ["Jimenez Huarhua, David", "djimenezh@cientifica.edu.pe"], ["Pariona Rojas, Carlos", "cparionar@cientifica.edu.pe"] ] },
+        { "nombre": "Desempeño Universitario", "creditos": 2, "codigo": "1634", "docentes": [ ["Granda Alva, Carlos Cesar Octavio", "cgrandaa@cientifica.edu.pe"] ] }
+      ]
+    };
+
+    const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    let viewDate = new Date();
+    const realToday = new Date();
+    let currentGallery = [];
+    let lightBoxIdx = 0;
+
+    function parseTime(timeStr) {
+      const [h, m] = timeStr.split(':').map(Number);
+      const d = new Date(); d.setHours(h, m, 0, 0); return d;
+    }
+
+    function getTimeDiffText(targetDate, prefix = "Faltan") {
+      const diff = targetDate - new Date();
+      if (diff <= 0) return "0s";
+      const totalSecs = Math.floor(diff / 1000);
+      const hours = Math.floor(totalSecs / 3600);
+      const mins = Math.floor((totalSecs % 3600) / 60);
+      const secs = totalSecs % 60;
+      if (hours > 0) return `${prefix} ${hours}h ${mins}m`;
+      if (mins > 0) return `${prefix} ${mins} min`;
+      return `${prefix} ${secs}s`; 
+    }
+
+    // MAPEO DE TÍTULOS DINÁMICOS
+    const tabTitles = {
+        'home': 'Inicio',
+        'schedule': 'Horario',
+        'courses': 'Cursos',
+        'gallery': 'Galería'
+    };
+
+    function switchTab(tab) {
+      // Cambio de título dinámico
+      document.getElementById('view-title').textContent = tabTitles[tab];
+
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+      document.getElementById('view-' + tab).classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-' + tab).classList.add('active');
+      if(tab === 'schedule') renderSchedule();
+      else if(tab === 'courses') renderCourses();
+      else if(tab === 'gallery') renderGallery();
+      else updateHome();
+    }
+
+    function updateHome() {
+      const now = new Date();
+      const diaHoy = diasSemana[now.getDay()];
+      const nowMin = now.getHours() * 60 + now.getMinutes();
+      const clasesHoy = data.horario.filter(c => c.dias.includes(diaHoy)).sort((a, b) => parseTime(a.inicio) - parseTime(b.inicio));
+      let actual = null, proxima = null;
+      clasesHoy.forEach(c => {
+        const start = parseTime(c.inicio), end = parseTime(c.fin);
+        const startM = start.getHours() * 60 + start.getMinutes(), endM = end.getHours() * 60 + end.getMinutes();
+        if (nowMin >= startM && nowMin < endM) actual = c;
+        else if (nowMin < startM && !proxima) proxima = c;
+      });
+      const currentContainer = document.getElementById('home-current-class');
+      if (actual) {
+        const start = parseTime(actual.inicio), end = parseTime(actual.fin);
+        const progress = ((now - start) / (end - start)) * 100;
+        currentContainer.innerHTML = `
+          <h3 class="text-2xl font-bold text-[#4a444c] mb-2">${actual.nombre}</h3>
+          <div class="mb-4 space-y-2">
+            <div class="flex items-center text-sm font-bold text-[#8e7d83]"><span class="iconify mr-2" data-icon="solar:clock-circle-bold"></span>${actual.inicio} a ${actual.fin}</div>
+            <div class="flex items-center text-sm font-bold text-[#8e7d83]"><span class="iconify mr-2" data-icon="solar:map-point-bold"></span>${actual.aula}</div>
+          </div>
+          <div class="flex justify-between items-center text-[10px] font-black text-[#ff4d6d] mb-2 uppercase tracking-widest">
+            <span class="timer-blink">● En vivo</span><span>${getTimeDiffText(end)}</span>
+          </div>
+          <div class="progress-bar-container"><div class="progress-bar" style="width: ${progress}%"></div></div>
+        `;
+      } else {
+        currentContainer.innerHTML = `<p class="text-gray-500 italic text-center py-6">No hay clases ahora 🌸</p>`;
+      }
+      const nextContainer = document.getElementById('home-next-class');
+      const nextBox = document.getElementById('container-next');
+      if (proxima) {
+        nextBox.style.display = 'block';
+        nextContainer.innerHTML = `
+          <h3 class="text-lg font-bold text-[#4a444c]">${proxima.nombre}</h3>
+          <div class="mt-3 space-y-2">
+             <div class="text-xs font-bold text-[#7db9e8] flex items-center tracking-tight">
+               <span class="iconify mr-2 text-base" data-icon="solar:play-circle-bold"></span>
+               Empieza en ${getTimeDiffText(parseTime(proxima.inicio), "")}
+             </div>
+             <div class="text-xs font-bold text-[#8e7d83] flex items-center">
+               <span class="iconify mr-2 text-base" data-icon="solar:map-point-bold"></span>
+               ${proxima.aula}
+             </div>
+          </div>
+        `;
+      } else {
+        nextBox.style.display = 'none';
+      }
+    }
+
+    function renderSchedule() {
+      const now = new Date();
+      const dayName = diasSemana[viewDate.getDay()];
+      const isToday = viewDate.toDateString() === realToday.toDateString();
+      document.getElementById('day-title').textContent = isToday ? "Hoy" : dayName;
+      document.getElementById('day-date').textContent = viewDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+      const list = document.getElementById('daily-schedule-list');
+      list.innerHTML = '';
+      const clases = data.horario.filter(c => c.dias.includes(dayName)).sort((a, b) => parseTime(a.inicio) - parseTime(b.inicio));
+      if (clases.length === 0) {
+        list.innerHTML = `<div class="text-center py-16 text-[#b5a4a7]"><span class="iconify text-6xl mb-4 inline-block" data-icon="solar:ufo-bold-duotone"></span><p class="font-bold">¡Día de descanso!</p></div>`;
+        return;
+      }
+      clases.forEach(c => {
+        const start = parseTime(c.inicio), end = parseTime(c.fin);
+        const isActive = isToday && now >= start && now < end;
+        list.innerHTML += `
+          <div class="card-cute p-5 ${isActive ? 'active-class-highlight' : ''}">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-[#4a444c] text-lg leading-tight w-2/3">${c.nombre}</h4>
+              <span class="text-[9px] px-3 py-1 rounded-full ${c.modalidad === 'Virtual' ? 'tag-virtual' : 'tag-presencial'}">${c.modalidad}</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center text-xs font-bold text-[#6d5f63]"><span class="iconify mr-2" data-icon="solar:clock-circle-bold"></span>${c.inicio} - ${c.fin}</div>
+              <div class="flex items-center text-xs font-bold text-[#8e7d83]"><span class="iconify mr-2" data-icon="solar:map-point-bold"></span>${c.aula}</div>
+            </div>
+            ${isActive ? `
+              <div class="mt-5 pt-3 border-t border-[#ffe5e9]">
+                <div class="flex justify-between text-[10px] font-black text-[#ff4d6d] mb-2 uppercase">
+                   <span class="timer-blink italic text-xs">Clase actual</span><span>${getTimeDiffText(end)}</span>
+                </div>
+                <div class="progress-bar-container"><div class="progress-bar" style="width: ${((now - start) / (end - start)) * 100}%"></div></div>
+              </div>` : ''}
+          </div>
+        `;
+      });
+    }
+
+    function renderCourses() {
+      const list = document.getElementById('courses-list');
+      const totalNum = document.getElementById('total-courses-num');
+      list.innerHTML = '';
+      totalNum.textContent = data.detalle_cursos.length;
+      data.detalle_cursos.forEach(c => {
+        list.innerHTML += `
+          <div class="card-cute p-6">
+            <div class="flex justify-between items-start border-b border-pink-50 pb-3 mb-4">
+              <h3 class="font-bold text-[#4a444c] text-lg leading-tight w-3/4">${c.nombre}</h3>
+              <div class="text-right">
+                <span class="block text-[10px] font-black text-[#ff8fa3]">CÓD. ${c.codigo}</span>
+                <span class="block text-[10px] font-bold text-gray-400">${c.creditos} CRÉDITOS</span>
+              </div>
+            </div>
+            <div class="space-y-4">
+              ${c.docentes.map(d => `
+                <div class="flex flex-col">
+                  <span class="text-xs font-bold text-[#6d5f63]">${d[0]}</span>
+                  <a href="mailto:${d[1]}" class="text-[11px] font-medium text-[#7db9e8] hover:underline flex items-center mt-0.5">
+                    <span class="iconify mr-1" data-icon="solar:letter-bold"></span>${d[1]}
+                  </a>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderGallery() {
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = '';
+      let items = [{ type: 'video', src: 'multimedia/1.mp4' }];
+      let photos = [];
+      for (let i = 1; i <= 20; i++) { photos.push({ type: 'photo', src: `multimedia/${i}.png` }); }
+      photos.sort(() => Math.random() - 0.5);
+      currentGallery = [...items, ...photos];
+      currentGallery.forEach((item, idx) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'gallery-item-wrapper';
+        wrapper.onclick = () => openLightbox(idx);
+        if (item.type === 'video') {
+          wrapper.innerHTML = `<video muted><source src="${item.src}"></video><div class="video-badge"><span class="iconify" data-icon="solar:play-bold"></span></div>`;
+        } else {
+          wrapper.innerHTML = `<img src="${item.src}" loading="lazy">`;
+        }
+        grid.appendChild(wrapper);
+      });
+    }
+
+    function openLightbox(idx) {
+      lightBoxIdx = idx;
+      const lb = document.getElementById('lightbox');
+      const container = document.getElementById('lightbox-media-container');
+      const item = currentGallery[idx];
+      lb.style.display = 'flex';
+      container.innerHTML = item.type === 'video' 
+        ? `<video id="lb-video" class="max-w-full max-h-[80vh] rounded-lg" controls autoplay><source src="${item.src}"></video>`
+        : `<img src="${item.src}" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl">`;
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').style.display = 'none';
+      document.getElementById('lightbox-media-container').innerHTML = '';
+    }
+
+    function nextMedia() { lightBoxIdx = (lightBoxIdx + 1) % currentGallery.length; openLightbox(lightBoxIdx); }
+    function prevMedia() { lightBoxIdx = (lightBoxIdx - 1 + currentGallery.length) % currentGallery.length; openLightbox(lightBoxIdx); }
+
+    document.getElementById('prev-day').onclick = () => { viewDate.setDate(viewDate.getDate() - 1); renderSchedule(); };
+    document.getElementById('next-day').onclick = () => { viewDate.setDate(viewDate.getDate() + 1); renderSchedule(); };
+
+    updateHome();
+    setInterval(() => {
+      updateHome();
+      if(document.getElementById('view-schedule').classList.contains('active')) renderSchedule();
+    }, 1000);
+  </script>
+</body>
+</html>
