@@ -35,7 +35,7 @@
     #lightbox-media-container { max-width: 100%; max-height: 80vh; border-radius: 15px; }
     .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 40px; padding: 20px; cursor: pointer; }
   </style>
-  <title>Horario</title>
+  <title>Horario de Mayerli</title>
 </head>
 <body>
 
@@ -52,8 +52,7 @@
       </div>
 
       <div id="home-content-wrapper" class="space-y-6">
-        <div id="home-empty-state" class="text-center py-10 space-y-4" style="display: none;">
-          </div>
+        <div id="home-empty-state" class="text-center py-10 space-y-4" style="display: none;"></div>
 
         <div id="container-current" class="card-cute p-6" style="display: none;">
           <div class="flex items-center gap-2 mb-4">
@@ -115,17 +114,59 @@
   <script>
     const data = {
       "horario": [
-        { "nombre": "Química", "dias": ["Lunes"], "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Lab. Química, B-201, Ate 1" },
-        { "nombre": "Química", "dias": ["Lunes"], "inicio": "17:50", "fin": "21:15", "modalidad": "Virtual", "aula": "Plataforma Virtual" },
-        { "nombre": "Introducción a la Medicina", "dias": ["Martes"], "inicio": "08:40", "fin": "11:10", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
-        { "nombre": "Biología Celular y Molecular", "dias": ["Miércoles"], "inicio": "07:00", "fin": "10:20", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
-        { "nombre": "Lengua y Oratoria", "dias": ["Miércoles"], "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
-        { "nombre": "Biología Celular y Molecular", "dias": ["Jueves"], "inicio": "07:00", "fin": "08:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
-        { "nombre": "Biología Celular y Molecular", "dias": ["Jueves"], "inicio": "08:40", "fin": "10:20", "modalidad": "Presencial", "aula": "Lab B-603, Ate 1" },
-        { "nombre": "Desempeño Universitario", "dias": ["Jueves"], "inicio": "13:40", "fin": "16:10", "modalidad": "Virtual", "aula": "Plataforma Virtual" },
-        { "nombre": "Química", "dias": ["Viernes"], "inicio": "10:20", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
-        { "nombre": "Matemática", "dias": ["Sábado"], "inicio": "08:40", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
-        { "nombre": "Lengua y Oratoria", "dias": ["Sábado"], "inicio": "12:00", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" }
+        // Semana 13/04 al 19/04
+        { "fecha": "2026-04-13", "nombre": "Química", "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Lab B-201, Ate 1", "docente": "Meza Aguilar, Svonnimir" },
+        { "fecha": "2026-04-13", "nombre": "Biología Celular y Molecular", "inicio": "12:00", "fin": "13:40", "modalidad": "Virtual", "aula": "Plataforma Virtual", "docente": "Rivera Ballon, Isabel Lucia" },
+        { "fecha": "2026-04-13", "nombre": "Desempeño Universitario", "inicio": "17:00", "fin": "19:45", "modalidad": "Virtual", "aula": "Plataforma Virtual", "docente": "Granda Alva, Carlos Cesar Octavio" },
+        { "fecha": "2026-04-14", "nombre": "Introducción a la Medicina", "inicio": "08:40", "fin": "09:30", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Flores Yabar, Jose Roberto" },
+        { "fecha": "2026-04-14", "nombre": "Introducción a la Medicina", "inicio": "09:30", "fin": "11:10", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Timana Laveriano, Jessica Khaterine" },
+        { "fecha": "2026-04-14", "nombre": "Biología Celular y Molecular", "inicio": "12:00", "fin": "13:40", "modalidad": "Virtual", "aula": "Plataforma Virtual", "docente": "Castañeda Checa, Erika" },
+        { "fecha": "2026-04-15", "nombre": "Biología Celular y Molecular", "inicio": "07:00", "fin": "10:20", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Aranguren Sandoval, Yudy Leonor" },
+        { "fecha": "2026-04-15", "nombre": "Lengua y Oratoria", "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Jimenez Huarhua, David" },
+        { "fecha": "2026-04-16", "nombre": "Biología Celular y Molecular", "inicio": "07:00", "fin": "08:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Rivera Ballon, Isabel Lucia" },
+        { "fecha": "2026-04-16", "nombre": "Biología Celular y Molecular", "inicio": "08:40", "fin": "10:20", "modalidad": "Presencial", "aula": "Lab B-603, Ate 1", "docente": "Castañeda Checa, Erika" },
+        { "fecha": "2026-04-16", "nombre": "Desempeño Universitario", "inicio": "13:40", "fin": "16:10", "modalidad": "Virtual", "aula": "Plataforma Virtual", "docente": "Granda Alva, Carlos Cesar Octavio" },
+        { "fecha": "2026-04-17", "nombre": "Química", "inicio": "10:20", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Colombo Ostos, Nina Margarita" },
+        { "fecha": "2026-04-18", "nombre": "Matemática", "inicio": "08:40", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Valdivia Lopez, Adolfo Santiago" },
+
+        // Semana 20/04 al 26/04
+        { "fecha": "2026-04-20", "nombre": "Química", "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Lab B-201, Ate 1", "docente": "Meza Aguilar, Svonnimir" },
+        { "fecha": "2026-04-21", "nombre": "Introducción a la Medicina", "inicio": "08:40", "fin": "09:30", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Flores Yabar, Jose Roberto" },
+        { "fecha": "2026-04-21", "nombre": "Introducción a la Medicina", "inicio": "09:30", "fin": "11:10", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Timana Laveriano, Jessica Khaterine" },
+        { "fecha": "2026-04-22", "nombre": "Biología Celular y Molecular", "inicio": "07:00", "fin": "10:20", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Aranguren Sandoval, Yudy Leonor" },
+        { "fecha": "2026-04-22", "nombre": "Lengua y Oratoria", "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Jimenez Huarhua, David" },
+        { "fecha": "2026-04-23", "nombre": "Biología Celular y Molecular", "inicio": "07:00", "fin": "08:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Rivera Ballon, Isabel Lucia" },
+        { "fecha": "2026-04-23", "nombre": "Biología Celular y Molecular", "inicio": "08:40", "fin": "10:20", "modalidad": "Presencial", "aula": "Lab B-603, Ate 1", "docente": "Castañeda Checa, Erika" },
+        { "fecha": "2026-04-23", "nombre": "Desempeño Universitario", "inicio": "13:40", "fin": "16:10", "modalidad": "Virtual", "aula": "Plataforma Virtual", "docente": "Granda Alva, Carlos Cesar Octavio" },
+        { "fecha": "2026-04-24", "nombre": "Química", "inicio": "10:20", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Colombo Ostos, Nina Margarita" },
+        { "fecha": "2026-04-25", "nombre": "Matemática", "inicio": "08:40", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Valdivia Lopez, Adolfo Santiago" },
+        { "fecha": "2026-04-25", "nombre": "Lengua y Oratoria", "inicio": "12:00", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Pariona Rojas, Carlos" },
+
+        // Semana 27/04 al 03/05
+        { "fecha": "2026-04-27", "nombre": "Química", "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Lab B-201, Ate 1", "docente": "Meza Aguilar, Svonnimir" },
+        { "fecha": "2026-04-28", "nombre": "Introducción a la Medicina", "inicio": "08:40", "fin": "09:30", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Flores Yabar, Jose Roberto" },
+        { "fecha": "2026-04-28", "nombre": "Introducción a la Medicina", "inicio": "09:30", "fin": "11:10", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Timana Laveriano, Jessica Khaterine" },
+        { "fecha": "2026-04-29", "nombre": "Biología Celular y Molecular", "inicio": "07:00", "fin": "10:20", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Aranguren Sandoval, Yudy Leonor" },
+        { "fecha": "2026-04-29", "nombre": "Lengua y Oratoria", "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Jimenez Huarhua, David" },
+        { "fecha": "2026-04-30", "nombre": "Biología Celular y Molecular", "inicio": "07:00", "fin": "08:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Rivera Ballon, Isabel Lucia" },
+        { "fecha": "2026-04-30", "nombre": "Biología Celular y Molecular", "inicio": "08:40", "fin": "10:20", "modalidad": "Presencial", "aula": "Lab B-603, Ate 1", "docente": "Castañeda Checa, Erika" },
+        { "fecha": "2026-04-30", "nombre": "Desempeño Universitario", "inicio": "13:40", "fin": "16:10", "modalidad": "Virtual", "aula": "Plataforma Virtual", "docente": "Granda Alva, Carlos Cesar Octavio" },
+        { "fecha": "2026-05-01", "nombre": "Química", "inicio": "10:20", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Colombo Ostos, Nina Margarita" },
+        { "fecha": "2026-05-02", "nombre": "Matemática", "inicio": "08:40", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Valdivia Lopez, Adolfo Santiago" },
+        { "fecha": "2026-05-02", "nombre": "Lengua y Oratoria", "inicio": "12:00", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Pariona Rojas, Carlos" },
+
+        // Semana 04/05 al 10/05
+        { "fecha": "2026-05-04", "nombre": "Química", "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Lab B-201, Ate 1", "docente": "Meza Aguilar, Svonnimir" },
+        { "fecha": "2026-05-05", "nombre": "Introducción a la Medicina", "inicio": "08:40", "fin": "09:30", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Flores Yabar, Jose Roberto" },
+        { "fecha": "2026-05-05", "nombre": "Introducción a la Medicina", "inicio": "09:30", "fin": "11:10", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Timana Laveriano, Jessica Khaterine" },
+        { "fecha": "2026-05-06", "nombre": "Biología Celular y Molecular", "inicio": "07:00", "fin": "10:20", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Aranguren Sandoval, Yudy Leonor" },
+        { "fecha": "2026-05-06", "nombre": "Lengua y Oratoria", "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Jimenez Huarhua, David" },
+        { "fecha": "2026-05-07", "nombre": "Biología Celular y Molecular", "inicio": "07:00", "fin": "08:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Rivera Ballon, Isabel Lucia" },
+        { "fecha": "2026-05-07", "nombre": "Biología Celular y Molecular", "inicio": "08:40", "fin": "10:20", "modalidad": "Presencial", "aula": "Lab B-603, Ate 1", "docente": "Castañeda Checa, Erika" },
+        { "fecha": "2026-05-07", "nombre": "Desempeño Universitario", "inicio": "13:40", "fin": "16:10", "modalidad": "Virtual", "aula": "Plataforma Virtual", "docente": "Granda Alva, Carlos Cesar Octavio" },
+        { "fecha": "2026-05-08", "nombre": "Química", "inicio": "10:20", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Colombo Ostos, Nina Margarita" },
+        { "fecha": "2026-05-09", "nombre": "Matemática", "inicio": "08:40", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Valdivia Lopez, Adolfo Santiago" },
+        { "fecha": "2026-05-09", "nombre": "Lengua y Oratoria", "inicio": "12:00", "fin": "13:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1", "docente": "Pariona Rojas, Carlos" }
       ],
       "detalle_cursos": [
         { "nombre": "Biología Celular y Molecular", "creditos": 6, "codigo": "1629", "docentes": [ ["Aranguren Sandoval, Yudy Leonor", "yaranguren@cientifica.edu.pe"], ["Castañeda Checa, Erika", "ecastanedac@cientifica.edu.pe"], ["Rivera Ballon, Isabel Lucia", "iriverab@cientifica.edu.pe"] ] },
@@ -190,9 +231,10 @@
 
     function updateHome(force = false) {
       const now = new Date();
-      const diaHoy = diasSemana[now.getDay()];
+      const isoDate = now.toISOString().split('T')[0];
       const nowMin = now.getHours() * 60 + now.getMinutes();
-      const clasesHoy = data.horario.filter(c => c.dias.includes(diaHoy)).sort((a, b) => parseTime(a.inicio) - parseTime(b.inicio));
+      
+      const clasesHoy = data.horario.filter(c => c.fecha === isoDate).sort((a, b) => parseTime(a.inicio) - parseTime(b.inicio));
 
       let actual = null, proxima = null;
       clasesHoy.forEach(c => {
@@ -206,13 +248,13 @@
       const containerNext = document.getElementById('container-next');
       const emptyState = document.getElementById('home-empty-state');
 
-      if (diaHoy === "Domingo") {
+      if (clasesHoy.length === 0) {
         emptyState.style.display = 'block';
         emptyState.innerHTML = `
           <span class="iconify text-7xl text-[#ffb3c1] inline-block" data-icon="solar:bed-bold-duotone"></span>
           <div class="space-y-1">
-            <h3 class="text-xl font-bold text-[#4a444c]">Domingo de paz</h3>
-            <p class="text-sm text-[#8e7d83] font-medium px-10 leading-relaxed">Es día de descanso total. ¡Aprovecha para relajarte y empezar bien la semana!</p>
+            <h3 class="text-xl font-bold text-[#4a444c]">Día de paz</h3>
+            <p class="text-sm text-[#8e7d83] font-medium px-10 leading-relaxed">No hay clases programadas. ¡Aprovecha para descansar!</p>
           </div>
         `;
         containerCurrent.style.display = 'none';
@@ -223,7 +265,7 @@
           <span class="iconify text-7xl text-[#ffb3c1] inline-block" data-icon="solar:cup-hot-bold-duotone"></span>
           <div class="space-y-1">
             <h3 class="text-xl font-bold text-[#4a444c]">¡Día terminado!</h3>
-            <p class="text-sm text-[#8e7d83] font-medium px-10 leading-relaxed">Ya no hay más clases por hoy. ¡A descansar, te lo mereces!</p>
+            <p class="text-sm text-[#8e7d83] font-medium px-10 leading-relaxed">Ya no hay más clases por hoy. ¡Te lo mereces!</p>
           </div>
         `;
         containerCurrent.style.display = 'none';
@@ -235,7 +277,8 @@
           const start = parseTime(actual.inicio), end = parseTime(actual.fin);
           const progress = ((now - start) / (end - start)) * 100;
           document.getElementById('home-current-class').innerHTML = `
-            <h3 class="text-2xl font-bold text-[#4a444c] mb-2">${actual.nombre}</h3>
+            <h3 class="text-2xl font-bold text-[#4a444c] mb-1">${actual.nombre}</h3>
+            <p class="text-xs font-bold text-[#ff8fa3] mb-3">${actual.docente}</p>
             <div class="mb-4 space-y-2">
               <div class="flex items-center text-sm font-bold text-[#8e7d83]"><span class="iconify mr-2" data-icon="solar:clock-circle-bold"></span>${actual.inicio} a ${actual.fin}</div>
               <div class="flex items-center text-sm font-bold text-[#8e7d83]"><span class="iconify mr-2" data-icon="solar:map-point-bold"></span>${actual.aula}</div>
@@ -250,20 +293,18 @@
         }
         if (proxima) {
           containerNext.style.display = 'block';
-          const diff = parseTime(proxima.inicio) - now;
-          if (diff < 60000 || force) {
-            document.getElementById('home-next-class').innerHTML = `
-              <h3 class="text-lg font-bold text-[#4a444c]">${proxima.nombre}</h3>
-              <div class="mt-3 space-y-2">
-                 <div class="text-xs font-bold text-[#7db9e8] flex items-center tracking-tight">
-                   <span class="iconify mr-2 text-base" data-icon="solar:play-circle-bold"></span>
-                   Empieza en ${getTimeDiffText(parseTime(proxima.inicio), "")}
-                 </div>
-                 <div class="text-xs font-bold text-[#8e7d83] flex items-center">
-                   <span class="iconify mr-2 text-base" data-icon="solar:map-point-bold"></span>${proxima.aula}
-                 </div>
-              </div>`;
-          }
+          document.getElementById('home-next-class').innerHTML = `
+            <h3 class="text-lg font-bold text-[#4a444c]">${proxima.nombre}</h3>
+            <p class="text-[10px] font-bold text-[#ff8fa3] mb-2">${proxima.docente}</p>
+            <div class="mt-3 space-y-2">
+               <div class="text-xs font-bold text-[#7db9e8] flex items-center tracking-tight">
+                 <span class="iconify mr-2 text-base" data-icon="solar:play-circle-bold"></span>
+                 Empieza en ${getTimeDiffText(parseTime(proxima.inicio), "")}
+               </div>
+               <div class="text-xs font-bold text-[#8e7d83] flex items-center">
+                 <span class="iconify mr-2 text-base" data-icon="solar:map-point-bold"></span>${proxima.aula}
+               </div>
+            </div>`;
         } else {
           containerNext.style.display = 'none';
         }
@@ -272,25 +313,32 @@
 
     function renderSchedule(force = false) {
       const now = new Date();
-      const dayName = diasSemana[viewDate.getDay()];
-      const diffTime = viewDate.setHours(0,0,0,0) - realToday.setHours(0,0,0,0);
+      const isoDate = viewDate.toISOString().split('T')[0];
+      const realTodayStr = realToday.toISOString().split('T')[0];
+      
+      const diffTime = new Date(isoDate) - new Date(realTodayStr);
       const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-      const label = diffDays === 0 ? "Hoy" : diffDays === 1 ? "Mañana" : diffDays === -1 ? "Ayer" : dayName;
+      
+      const label = diffDays === 0 ? "Hoy" : diffDays === 1 ? "Mañana" : diffDays === -1 ? "Ayer" : diasSemana[viewDate.getDay()];
       document.getElementById('day-title').textContent = label;
       document.getElementById('day-date').textContent = viewDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
-      const clases = data.horario.filter(c => c.dias.includes(dayName)).sort((a, b) => parseTime(a.inicio) - parseTime(b.inicio));
+      
+      const clases = data.horario.filter(c => c.fecha === isoDate).sort((a, b) => parseTime(a.inicio) - parseTime(b.inicio));
       const list = document.getElementById('daily-schedule-list');
+      
       if (!force && diffDays !== 0) return;
-      list.innerHTML = clases.length === 0 ? `<div class="text-center py-16 text-[#b5a4a7]"><span class="iconify text-6xl mb-4 inline-block" data-icon="solar:ufo-bold-duotone"></span><p class="font-bold">¡Día de descanso!</p></div>` : "";
+      list.innerHTML = clases.length === 0 ? `<div class="text-center py-16 text-[#b5a4a7]"><span class="iconify text-6xl mb-4 inline-block" data-icon="solar:ufo-bold-duotone"></span><p class="font-bold">¡Día libre!</p></div>` : "";
+      
       clases.forEach(c => {
         const start = parseTime(c.inicio), end = parseTime(c.fin);
         const isActive = diffDays === 0 && now >= start && now < end;
         list.innerHTML += `
           <div class="card-cute p-5 ${isActive ? 'active-class-highlight' : ''}">
-            <div class="flex justify-between items-start mb-3">
+            <div class="flex justify-between items-start mb-1">
               <h4 class="font-bold text-[#4a444c] text-lg leading-tight w-2/3">${c.nombre}</h4>
               <span class="text-[9px] px-3 py-1 rounded-full ${c.modalidad === 'Virtual' ? 'tag-virtual' : 'tag-presencial'}">${c.modalidad}</span>
             </div>
+            <p class="text-[11px] font-bold text-[#ff8fa3] mb-3">${c.docente}</p>
             <div class="space-y-1">
               <div class="flex items-center text-xs font-bold text-[#6d5f63]"><span class="iconify mr-2" data-icon="solar:clock-circle-bold"></span>${c.inicio} - ${c.fin}</div>
               <div class="flex items-center text-xs font-bold text-[#8e7d83]"><span class="iconify mr-2" data-icon="solar:map-point-bold"></span>${c.aula}</div>
