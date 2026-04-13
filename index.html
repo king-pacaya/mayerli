@@ -34,17 +34,12 @@
     #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
     #lightbox-media-container { max-width: 100%; max-height: 80vh; border-radius: 15px; }
     .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 40px; padding: 20px; cursor: pointer; }
-    #btn-fullscreen { position: absolute; top: 25px; right: 20px; color: #ffb3c1; transition: transform 0.2s; }
   </style>
   <title>Horario</title>
 </head>
 <body>
 
   <div class="max-w-md mx-auto px-6 py-10 text-center relative">
-    <button id="btn-fullscreen" onclick="toggleFullscreen()">
-      <span id="fs-icon" class="iconify text-3xl" data-icon="solar:full-screen-bold-duotone"></span>
-    </button>
-
     <header class="mb-8">
       <h1 id="view-title" class="text-4xl font-bold text-[#ff758f]">Inicio</h1>
       <p class="text-sm font-semibold text-[#8e7d83] mt-2">Medicina • Científica del Sur</p>
@@ -58,12 +53,7 @@
 
       <div id="home-content-wrapper" class="space-y-6">
         <div id="home-empty-state" class="text-center py-10 space-y-4" style="display: none;">
-          <span class="iconify text-7xl text-[#ffb3c1] inline-block" data-icon="solar:cup-hot-bold-duotone"></span>
-          <div class="space-y-1">
-            <h3 class="text-xl font-bold text-[#4a444c]">¡Día terminado!</h3>
-            <p class="text-sm text-[#8e7d83] font-medium px-10 leading-relaxed">Ya no hay más clases por hoy. ¡A descansar, te lo mereces!</p>
           </div>
-        </div>
 
         <div id="container-current" class="card-cute p-6" style="display: none;">
           <div class="flex items-center gap-2 mb-4">
@@ -127,8 +117,7 @@
       "horario": [
         { "nombre": "Química", "dias": ["Lunes"], "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Lab. Química, B-201, Ate 1" },
         { "nombre": "Química", "dias": ["Lunes"], "inicio": "13:50", "fin": "21:15", "modalidad": "Virtual", "aula": "Plataforma Virtual" },
-        { "nombre": "Introducción a la Medicina", "dias": ["Martes"], "inicio": "08:40", "fin": "09:30", "modalidad": "Virtual", "aula": "Plataforma Virtual" },
-        { "nombre": "Introducción a la Medicina", "dias": ["Martes"], "inicio": "09:30", "fin": "11:10", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
+        { "nombre": "Introducción a la Medicina", "dias": ["Martes"], "inicio": "08:40", "fin": "11:10", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
         { "nombre": "Biología Celular y Molecular", "dias": ["Miércoles"], "inicio": "07:00", "fin": "10:20", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
         { "nombre": "Lengua y Oratoria", "dias": ["Miércoles"], "inicio": "10:20", "fin": "12:00", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
         { "nombre": "Biología Celular y Molecular", "dias": ["Jueves"], "inicio": "07:00", "fin": "08:40", "modalidad": "Presencial", "aula": "Aula A-105, Ate 1" },
@@ -172,16 +161,6 @@
       if (mins > 0) return `${prefix} ${mins} min`;
       return `${prefix} ${secs}s`; 
     }
-
-    function toggleFullscreen() {
-        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-        else document.exitFullscreen();
-    }
-
-    document.addEventListener('fullscreenchange', () => {
-        const icon = document.getElementById('fs-icon');
-        icon.setAttribute('data-icon', document.fullscreenElement ? 'solar:quit-full-screen-bold-duotone' : 'solar:full-screen-bold-duotone');
-    });
 
     function updateGreeting() {
         const now = new Date();
@@ -227,14 +206,30 @@
       const containerNext = document.getElementById('container-next');
       const emptyState = document.getElementById('home-empty-state');
 
-      // Lógica de visualización: si no hay nada actual ni próximo, mostramos el empty state
-      if (!actual && !proxima) {
+      if (diaHoy === "Domingo") {
         emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <span class="iconify text-7xl text-[#ffb3c1] inline-block" data-icon="solar:bed-bold-duotone"></span>
+          <div class="space-y-1">
+            <h3 class="text-xl font-bold text-[#4a444c]">Domingo de paz</h3>
+            <p class="text-sm text-[#8e7d83] font-medium px-10 leading-relaxed">Es día de descanso total. ¡Aprovecha para relajarte y empezar bien la semana!</p>
+          </div>
+        `;
+        containerCurrent.style.display = 'none';
+        containerNext.style.display = 'none';
+      } else if (!actual && !proxima) {
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <span class="iconify text-7xl text-[#ffb3c1] inline-block" data-icon="solar:cup-hot-bold-duotone"></span>
+          <div class="space-y-1">
+            <h3 class="text-xl font-bold text-[#4a444c]">¡Día terminado!</h3>
+            <p class="text-sm text-[#8e7d83] font-medium px-10 leading-relaxed">Ya no hay más clases por hoy. ¡A descansar, te lo mereces!</p>
+          </div>
+        `;
         containerCurrent.style.display = 'none';
         containerNext.style.display = 'none';
       } else {
         emptyState.style.display = 'none';
-        
         if (actual) {
           containerCurrent.style.display = 'block';
           const start = parseTime(actual.inicio), end = parseTime(actual.fin);
@@ -253,7 +248,6 @@
         } else {
           containerCurrent.style.display = 'none';
         }
-
         if (proxima) {
           containerNext.style.display = 'block';
           const diff = parseTime(proxima.inicio) - now;
